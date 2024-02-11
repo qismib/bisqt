@@ -7,7 +7,7 @@ from qiskit.quantum_info import SparsePauliOp
 #Bose-Hubbard Hamiltonian of a system of bosons 
 #binary mapping
 
-class BoseHubbardHamiltonian:
+class BoseHubbardHamiltonian: 
         
     def __init__(self, n_sites, single_site_qubits, geometry):
         
@@ -24,7 +24,7 @@ class BoseHubbardHamiltonian:
     def second_quantization_ops(self):
        
         dim =  2**(self.ss_q)
-        create_matrix = np.zeros((dim,dim),dtype=float)
+        create_matrix = np.zeros((dim,dim),dtype=float)  
         
         for i in range(dim-1): 
             create_matrix[i+1][i] = math.sqrt(i+1)
@@ -100,6 +100,7 @@ class BoseHubbardHamiltonian:
         
         number_tot = []
         potent = []
+        
         for i in range(self.n_sites): 
             Op[i] = self.number
        
@@ -109,7 +110,7 @@ class BoseHubbardHamiltonian:
                 Operator = Operator^Op[k]
                 k = k+1
 
-            number_tot.append(Operator)
+            number_tot.append(Operator)  #list of single site number operators on n_sites*ss_q qubit
                     
             Op[i] = self.I_q
 
@@ -122,8 +123,14 @@ class BoseHubbardHamiltonian:
         self.Potential = sum(potent).simplify()
 
         return self.Potential, self.total_number
-
-    def get_H(self, J, U):
+    
+    #additional term in the Hamiltonian that allows to seletect states with a miximum number of particles
+    # n = possible number of particles 
+    def eigenvalues_selection_op(self, A, N):
+        self.constraint_op = A*((N * self.I_n - self.total_number).compose((N * self.I_n - self.total_number)))     
+        return self.constraint_op
+    
+    def get_H(self, t, U):
         
         BoseHubbardHamiltonian.second_quantization_ops(self)
         BoseHubbardHamiltonian.lattice_connectivity(self)
@@ -131,7 +138,13 @@ class BoseHubbardHamiltonian:
         BoseHubbardHamiltonian.potential_energy_op(self)
              
         self.U = U
-        self.J = J
-        H =  J*self.Kinetic + U*self.Potential
+        self.t = t
+        H =  t*self.Kinetic + U*self.Potential
         return H
         
+    def get_H_constrained(self, t, U, A, N):
+
+        H = BoseHubbardHamiltonian.get_H(self, t, U)
+        self.Constraint = BoseHubbardHamiltonian.eigenvalues_selection_op(self, N)
+        
+        return H + A *Constraint

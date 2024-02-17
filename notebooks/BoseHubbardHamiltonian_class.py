@@ -19,7 +19,13 @@ class BoseHubbardHamiltonian:
         self.ss_q = single_site_qubits
         self.geometry = geometry.to_adjacency_matrix() # the adjacency matrix gives informations about the connectivity of the sites
 
+        # call methods to initialize attributes
+        self.second_quantization_ops()
+        self.lattice_connectivity()
+        self.kinetic_energy_op()
+        self.potential_energy_op()
 
+    
     #creation, annihilation, number and identity operators on single_site_qubits number of qubits
     def second_quantization_ops(self):
        
@@ -131,20 +137,9 @@ class BoseHubbardHamiltonian:
         return self.constraint_op
     
     def get_H(self, t, U):
-        
-        BoseHubbardHamiltonian.second_quantization_ops(self)
-        BoseHubbardHamiltonian.lattice_connectivity(self)
-        BoseHubbardHamiltonian.kinetic_energy_op(self)
-        BoseHubbardHamiltonian.potential_energy_op(self)
              
         self.U = U
         self.t = t
         H =  t*self.Kinetic + U*self.Potential
         return H
         
-    def get_H_constrained(self, t, U, A, N):
-
-        H = BoseHubbardHamiltonian.get_H(self, t, U)
-        self.Constraint = BoseHubbardHamiltonian.eigenvalues_selection_op(self, N)
-        
-        return H + A *Constraint

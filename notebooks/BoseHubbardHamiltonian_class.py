@@ -72,7 +72,7 @@ class BoseHubbardHamiltonian:
                     Op[j] = self.annihilate
                       
                     Operator = Op[0]
-                    for k in range (1 , n_sites ) :
+                    for k in range (1 , self.n_sites ) :
                         Operator = Operator^Op[k]
 
                     kin.append(Operator)
@@ -96,7 +96,7 @@ class BoseHubbardHamiltonian:
         #identità per n siti con ss_q qubit per sito
         I_n = I_n_list[0]
         
-        for k in range (1 , n_sites ) :
+        for k in range (1 , self.n_sites ) :
             I_n = I_n^I_n_list[i]
             
         
@@ -110,7 +110,7 @@ class BoseHubbardHamiltonian:
        
             Operator = Op[0]
             
-            for k in range (1 , n_sites ) :
+            for k in range (1 , self.n_sites) :
                 Operator = Operator^Op[k]
 
             number_tot.append(Operator)  #list of single site number operators on n_sites*ss_q qubit

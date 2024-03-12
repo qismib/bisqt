@@ -1,0 +1,1 @@
+from bisqt.BoseHubbardHamiltonian_class import BoseHubbardHamiltonian 

@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "bisqt"
+version = "0.1.0"
+description = "\"Qubit reductions techniques for bosonic systems\""
+authors = ["MartinaPiccamiglio <martina.piccamiglio@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+qiskit = "= 0.44.3"
+symmer = "^0.0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
